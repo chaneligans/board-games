@@ -99,17 +99,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cecs475.BoardGames.Chess.WpfView\Cecs475.BoardGames.Chess.WpfView.csproj">
-      <Project>{20257671-126d-4f16-a99e-ca6747d400c6}</Project>
-      <Name>Cecs475.BoardGames.Chess.WpfView</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cecs475.BoardGames.Othello.WpfView\Cecs475.BoardGames.Othello.WpfView.csproj">
-      <Project>{b60be21d-4156-4033-a296-c9fe1347fbd1}</Project>
-      <Name>Cecs475.BoardGames.Othello.WpfView</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cecs475.BoardGames.TicTacToe.WpfView\Cecs475.BoardGames.TicTacToe.WpfView.csproj">
-      <Project>{8b69e987-cc12-47cf-82b0-87d608aa69f3}</Project>
-      <Name>Cecs475.BoardGames.TicTacToe.WpfView</Name>
+    <ProjectReference Include="..\Cecs475.BoardGames.Model\Cecs475.BoardGames.Model.csproj">
+      <Project>{ad3670ac-f179-44fd-b2c4-2bf0c6819355}</Project>
+      <Name>Cecs475.BoardGames.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Cecs475.BoardGames.WpfView\Cecs475.BoardGames.WpfView.csproj">
       <Project>{2df47748-ad85-4ed5-8b57-729bed253f66}</Project>
