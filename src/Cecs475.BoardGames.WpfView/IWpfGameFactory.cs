@@ -9,7 +9,7 @@ namespace Cecs475.BoardGames.WpfView {
 	/// </summary>
 	public interface IWpfGameFactory {
 		string GameName { get; }
-		IWpfGameView CreateGameView();
+		IWpfGameView CreateGameView(NumberOfPlayers players);
 		IValueConverter CreateBoardAdvantageConverter();
 		IValueConverter CreateCurrentPlayerConverter();
 	}

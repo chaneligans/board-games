@@ -13,6 +13,11 @@ namespace Cecs475.BoardGames.TicTacToe.Model {
 	public class TicTacToeBoard : IGameBoard {
 		private int mPlayer;
 		private sbyte[,] mBoard = new sbyte[3, 3];
+		private static sbyte[,] mWeights = new sbyte[3, 3] {
+			{3, 1, 3 },
+			{1, 2, 1 },
+			{3, 1, 3 }
+		};
 
 		private List<TicTacToeMove> mMoveHistory = new List<TicTacToeMove>();
 
@@ -30,20 +35,22 @@ namespace Cecs475.BoardGames.TicTacToe.Model {
 		/// Value is either 0, or 1 if Player 1 has won, or -1 if Player 2 has won.
 		/// </summary>
 		private int mValue;
+		private long mWeight;
 
 		public IReadOnlyList<TicTacToeMove> MoveHistory => mMoveHistory;
 
 		public bool IsFinished { get; private set; }
 
-		public GameAdvantage CurrentAdvantage => new GameAdvantage(mValue, mValue == 0 ? 0 : mValue > 0 ? 1 : 2);
+		public GameAdvantage CurrentAdvantage => new GameAdvantage(mValue == 0 ? 0 : mValue > 0 ? 1 : 2, mValue);
 
-		IReadOnlyList<IGameMove> IGameBoard.MoveHistory => throw new NotImplementedException();
+		IReadOnlyList<IGameMove> IGameBoard.MoveHistory => MoveHistory;
 
 		public void ApplyMove(TicTacToeMove m) {
 			SetPosition(m.Position, CurrentPlayer);
+			mWeight += mPlayer * mWeights[m.Position.Row, m.Position.Col];
 			mMoveHistory.Add(m);
 			mPlayer = -mPlayer;
-			IsFinished = GameIsOver();
+			IsFinished = GameIsOver() || MoveHistory.Count == 9;
 		}
 
 		/// <summary>
@@ -90,9 +97,11 @@ namespace Cecs475.BoardGames.TicTacToe.Model {
 		}
 
 		public void UndoLastMove() {
-			TicTacToeMove m = MoveHistory.Last() as TicTacToeMove;
+			TicTacToeMove m = MoveHistory.Last();
 			SetPosition(m.Position, 0);
 			mMoveHistory.RemoveAt(MoveHistory.Count - 1);
+			mWeight += mPlayer * mWeights[m.Position.Row, m.Position.Col];
+			mPlayer = -mPlayer;
 			mValue = 0;
 			IsFinished = false;
 		}
@@ -103,6 +112,14 @@ namespace Cecs475.BoardGames.TicTacToe.Model {
 
 		public void ApplyMove(IGameMove move) {
 			ApplyMove(move as TicTacToeMove);
+		}
+
+		public long BoardWeight {
+			get {
+				return CurrentAdvantage.Player == 0 ? mWeight :
+					CurrentAdvantage.Player == 1 ? long.MaxValue :
+					long.MinValue;
+			}
 		}
 	}
 }

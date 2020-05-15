@@ -43,8 +43,18 @@ namespace Cecs475.BoardGames.Othello.Model {
 		private List<List<FlipSet>> mFlipSets = new List<List<FlipSet>>();
 
 		private int mAdvantageValue;
+
+		private static sbyte[,] mPositionWeights = new sbyte[BOARD_SIZE, BOARD_SIZE] {
+			{16, 0, 8, 8, 8, 8, 0, 16},
+			{0,  0, 1, 1, 1, 1, 0, 0},
+			{8,  1, 2, 2, 2, 2, 1, 8},
+			{8,  1, 2, 2, 2, 2, 1, 8},
+			{8,  1, 2, 2, 2, 2, 1, 8},
+			{8,  1, 2, 2, 2, 2, 1, 8},
+			{0,  0, 1, 1, 1, 1, 0, 0},
+			{16, 0, 8, 8, 8, 8, 0, 16}};
 		#endregion
-		
+
 		#region Auto properties.
 		/// <summary>
 		/// How many "pass" moves have been applied in a row.
@@ -108,6 +118,7 @@ namespace Cecs475.BoardGames.Othello.Model {
 				// Otherwise update the board at the move's position with the current player.
 				SetPlayerAtPosition(m.Position, CurrentPlayer);
 				mAdvantageValue += mCurrentPlayer;
+				BoardWeight += mCurrentPlayer * mPositionWeights[m.Position.Row, m.Position.Col];
 
 				// Iterate through all 8 directions radially from the move's position.
 				foreach (BoardDirection dir in BoardDirection.CardinalDirections) {
@@ -117,7 +128,7 @@ namespace Cecs475.BoardGames.Othello.Model {
 					do {
 						newPos = newPos.Translate(dir);
 						steps++;
-					} while (PositionIsEnemy(newPos, CurrentPlayer));
+					} while (PositionInBounds(newPos) && PositionIsEnemy(newPos, CurrentPlayer));
 
 					// This is a valid direction of flips if we moved at least 2 squares, and ended in bounds and on a
 					// "friendly" square.
@@ -131,6 +142,7 @@ namespace Cecs475.BoardGames.Othello.Model {
 							newPos = newPos.Translate(reverse);
 							SetPlayerAtPosition(newPos, CurrentPlayer);
 							mAdvantageValue += 2 * mCurrentPlayer;
+							BoardWeight += 2 * mCurrentPlayer * mPositionWeights[newPos.Row, newPos.Col];
 
 							steps--;
 						}
@@ -166,7 +178,7 @@ namespace Cecs475.BoardGames.Othello.Model {
 					do {
 						newPos = newPos.Translate(dir);
 						steps++;
-					} while (PositionIsEnemy(newPos, CurrentPlayer));
+					} while (PositionInBounds(newPos) && PositionIsEnemy(newPos, CurrentPlayer));
 
 					// This is a valid direction of flips if we moved at least 2 squares, and ended in bounds and on a
 					// "friendly" square.
@@ -192,11 +204,11 @@ namespace Cecs475.BoardGames.Othello.Model {
 		public void UndoLastMove() {
 			OthelloMove m = mMoveHistory.Last();
 
-			// Note: there is a bug in this code.
 			if (!m.IsPass) {
 				// Reset the board at the move's position.
 				SetPlayerAtPosition(m.Position, 0);
 				mAdvantageValue += mCurrentPlayer;
+				BoardWeight += mCurrentPlayer * mPositionWeights[m.Position.Row, m.Position.Col];
 
 				// Iterate through the move's recorded flipsets.
 				foreach (var flipSet in mFlipSets.Last()) {
@@ -208,6 +220,7 @@ namespace Cecs475.BoardGames.Othello.Model {
 						// we are undoing, whose pieces we must restore.
 						SetPlayerAtPosition(pos, CurrentPlayer);
 						mAdvantageValue += 2 * mCurrentPlayer;
+						BoardWeight += 2 * mCurrentPlayer * mPositionWeights[pos.Row, pos.Col];
 					}
 				}
 
@@ -238,7 +251,9 @@ namespace Cecs475.BoardGames.Othello.Model {
 		/// and the MSB being index 63.
 		/// </summary>
 		private static int GetBitIndexForPosition(BoardPosition boardPosition) =>
-			63 - (boardPosition.Row * 8 + boardPosition.Col);
+			PositionInBounds(boardPosition) ? 
+				63 - (boardPosition.Row * 8 + boardPosition.Col)
+				: 64;
 
 		private void SetPlayerAtPosition(BoardPosition position, int player) {
 			// Construct a bitmask for the bit position corresponding to the BoardPosition.
@@ -264,6 +279,9 @@ namespace Cecs475.BoardGames.Othello.Model {
 			}
 		}
 
+		private static bool PositionInBounds(BoardPosition pos) =>
+			pos.Row >= 0 && pos.Col >= 0 && pos.Row <= 7 && pos.Col <= 7;
+
 		/// <summary>
 		/// Returns true if the given in-bounds position is an enemy of the given player.
 		/// </summary>
@@ -282,6 +300,10 @@ namespace Cecs475.BoardGames.Othello.Model {
 		}
 
 		IReadOnlyList<IGameMove> IGameBoard.MoveHistory => mMoveHistory;
+
+		public long BoardWeight {
+			get; private set;
+		}
 
 		void IGameBoard.ApplyMove(IGameMove move) {
 			ApplyMove(move as OthelloMove);

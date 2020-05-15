@@ -7,6 +7,7 @@ using System;
 
 using Cecs475.BoardGames.Othello.Model;
 using Cecs475.BoardGames.Model;
+using Cecs475.BoardGames.ComputerOpponent;
 
 namespace Cecs475.BoardGames.Othello.WpfView {
 	/// <summary>
@@ -62,6 +63,8 @@ namespace Cecs475.BoardGames.Othello.WpfView {
 		private OthelloBoard mBoard;
 		private ObservableCollection<OthelloSquare> mSquares;
 		public event EventHandler GameFinished;
+		private const int MAX_AI_DEPTH = 7;
+		private IGameAi mGameAi = new MinimaxAi(MAX_AI_DEPTH);
 
 		public OthelloViewModel() {
 			mBoard = new OthelloBoard();
@@ -91,6 +94,13 @@ namespace Cecs475.BoardGames.Othello.WpfView {
 				if (move.Position.Equals(position)) {
 					mBoard.ApplyMove(move);
 					break;
+				}
+			}
+
+			if (Players == NumberOfPlayers.One && !mBoard.IsFinished) {
+				var bestMove = mGameAi.FindBestMove(mBoard);
+				if (bestMove != null) {
+					mBoard.ApplyMove(bestMove as OthelloMove);
 				}
 			}
 
@@ -150,6 +160,8 @@ namespace Cecs475.BoardGames.Othello.WpfView {
 
 		public bool CanUndo => mBoard.MoveHistory.Any();
 
+		public NumberOfPlayers Players { get; set; }
+
 		public event PropertyChangedEventHandler PropertyChanged;
 		private void OnPropertyChanged(string name) {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -158,6 +170,11 @@ namespace Cecs475.BoardGames.Othello.WpfView {
 		public void UndoMove() {
 			if (CanUndo) {
 				mBoard.UndoLastMove();
+				// In one-player mode, Undo has to remove an additional move to return to the
+				// human player's turn.
+				if (Players == NumberOfPlayers.One && CanUndo) {
+					mBoard.UndoLastMove();
+				}
 				RebindState();
 			}
 		}

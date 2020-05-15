@@ -45,5 +45,12 @@ namespace Cecs475.BoardGames.Model {
 		/// </summary>
 		/// <see cref="IsFinished"/>
 		GameAdvantage CurrentAdvantage { get; }
+
+		/// <summary>
+		/// A value indicating which player has a stronger board position, where
+		/// higher positive values indicate a better position for player 1, 
+		/// more negative values indicate a better position for player 2.
+		/// </summary>
+		long BoardWeight { get; }
 	}
 }
