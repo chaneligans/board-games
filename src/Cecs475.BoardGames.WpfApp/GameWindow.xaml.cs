@@ -9,9 +9,9 @@ namespace Cecs475.BoardGames.WpfApp {
 		/// <summary>
 		/// Creates a GameWindow containing the given game View control.
 		/// </summary>
-		public GameWindow(IWpfGameFactory factory) {
+		public GameWindow(IWpfGameFactory factory, NumberOfPlayers players) {
 			// Set the DynamicResource named GameView to the given control.
-			var gameView = factory.CreateGameView();
+			var gameView = factory.CreateGameView(players);
 			this.Resources.Add("GameView", gameView.ViewControl);
 			this.Resources.Add("ViewModel", gameView.ViewModel);
 

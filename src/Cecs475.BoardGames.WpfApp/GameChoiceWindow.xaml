@@ -23,5 +23,12 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+    <StackPanel>
+      <Label>Choose an opponent:</Label>
+      <WrapPanel Margin="5,0,0,5">
+        <RadioButton x:Name="mHumanBtn" IsChecked="True" VerticalContentAlignment="Center">Human</RadioButton>
+        <RadioButton Margin="10,0,0,0" VerticalContentAlignment="Center">Computer AI</RadioButton>
+      </WrapPanel>
     </StackPanel>
+  </StackPanel>
 </Window>

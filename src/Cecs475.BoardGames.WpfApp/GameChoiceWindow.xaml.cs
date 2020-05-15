@@ -55,7 +55,8 @@ namespace Cecs475.BoardGames.WpfApp {
 			// Retrieve the game type bound to the button
 			IWpfGameFactory gameType = b.DataContext as IWpfGameFactory;
 			// Construct a GameWindow to play the game.
-			var gameWindow = new GameWindow(gameType) {
+			var gameWindow = new GameWindow(gameType,
+				mHumanBtn.IsChecked.Value ? NumberOfPlayers.Two : NumberOfPlayers.One) {
 				Title = gameType.GameName
 			};
 			// When the GameWindow closes, we want to show this window again.

@@ -123,4 +123,8 @@
     <Resource Include="Resources\white_rook.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)\$(TargetName).dll" "$(SolutionDir)src\Cecs475.BoardGames.WpfApp\bin\Debug\games"
+copy "$(TargetDir)\Cecs475.BoardGames.Chess.Model.dll" "$(SolutionDir)src\Cecs475.BoardGames.WpfApp\bin\Debug\games"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

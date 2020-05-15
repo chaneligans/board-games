@@ -50,6 +50,7 @@
     <Compile Include="IGameViewModel.cs" />
     <Compile Include="IWpfGameFactory.cs" />
     <Compile Include="IWpfGameView.cs" />
+    <Compile Include="NumberOfPlayers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

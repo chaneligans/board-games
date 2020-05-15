@@ -34,6 +34,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 		private byte[] mBoard;
 
 		// Add a means of tracking miscellaneous board state, like captured pieces and the 50-move rule.
+		public long BoardWeight {	get; private set;	}
 		private List<ChessPiece> CapturedPieces { get; set; }
 		private ISet<BoardPosition> tempList { get; set; }
 		private int NumMovesNoPawnOrCapture { get; set; }
@@ -67,7 +68,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 		// the access level (public, private).
 
 
-		public bool IsFinished { get { return IsCheckmate || IsStalemate || IsDraw; } }
+		public bool IsFinished { get { return GetPossibleMoves().Any() || IsDraw; } }
 
 		public int CurrentPlayer { get { return mCurrentPlayer == 1 ? 1 : 2; } }
 

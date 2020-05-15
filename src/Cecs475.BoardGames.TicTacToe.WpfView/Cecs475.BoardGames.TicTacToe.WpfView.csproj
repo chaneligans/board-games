@@ -55,6 +55,10 @@
     <Compile Include="TicTacToeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Cecs475.BoardGames.ComputerOpponent\Cecs475.BoardGames.ComputerOpponent.csproj">
+      <Project>{8a3610b2-8434-4f8f-802f-6a9cbc67471c}</Project>
+      <Name>Cecs475.BoardGames.ComputerOpponent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cecs475.BoardGames.Model\Cecs475.BoardGames.Model.csproj">
       <Project>{E30836FA-92E0-4787-9237-DC750C339FB9}</Project>
       <Name>Cecs475.BoardGames.Model</Name>
@@ -75,6 +79,10 @@
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)\$(TargetName).dll" "$(SolutionDir)src\Cecs475.BoardGames.WpfApp\bin\Debug\games"
+copy "$(TargetDir)\Cecs475.BoardGames.TicTacToe.Model.dll" "$(SolutionDir)src\Cecs475.BoardGames.WpfApp\bin\Debug\games"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

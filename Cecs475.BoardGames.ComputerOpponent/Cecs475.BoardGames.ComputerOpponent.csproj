@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\Cecs475.BoardGames.Model\Cecs475.BoardGames.Model.csproj" />
+  </ItemGroup>
+
 </Project>
