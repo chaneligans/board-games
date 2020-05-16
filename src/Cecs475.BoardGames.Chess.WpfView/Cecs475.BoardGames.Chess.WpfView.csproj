@@ -85,6 +85,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Cecs475.BoardGames.ComputerOpponent\Cecs475.BoardGames.ComputerOpponent.csproj">
+      <Project>{8A3610B2-8434-4F8F-802F-6A9CBC67471C}</Project>
+      <Name>Cecs475.BoardGames.ComputerOpponent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cecs475.BoardGames.Chess.Model\Cecs475.BoardGames.Chess.Model.csproj">
       <Project>{16a691e8-d370-4cab-a02c-1bbbfdf19dd4}</Project>
       <Name>Cecs475.BoardGames.Chess.Model</Name>

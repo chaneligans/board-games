@@ -34,7 +34,78 @@ namespace Cecs475.BoardGames.Chess.Model {
 		private byte[] mBoard;
 
 		// Add a means of tracking miscellaneous board state, like captured pieces and the 50-move rule.
-		public long BoardWeight {	get; private set;	}
+
+		//Need to do protect
+		public long BoardWeight
+		{
+			get
+			{
+				long whiteOwnership = new GameAdvantage(1, mAdvantageValue).Advantage;
+				long blackOwnership = new GameAdvantage(2, mAdvantageValue * -1).Advantage;
+				long whitePawnMove = 0;
+				long blackPawnMove = 0;
+				long whiteProtect = 0;
+				long blackProtect = 0;
+				long whiteThreaten = 0;
+				long blackThreaten = 0;
+
+				var boardPositions = BoardPosition.GetRectangularPositions(8, 8);
+				var whiteAttack = GetAttackedPositions(1);
+				var blackAttack = GetAttackedPositions(2);
+
+				foreach (BoardPosition pos in boardPositions) {
+					var cPiece = GetPieceAtPosition(pos);
+					if (cPiece.PieceType == ChessPieceType.Pawn && cPiece.Player == 1) {
+						whitePawnMove += 6 - pos.Row;
+					}
+					else if (cPiece.PieceType == ChessPieceType.Pawn && cPiece.Player == 2) {
+						blackPawnMove += pos.Row - 1;
+					}
+				}
+
+				foreach (BoardPosition pos in whiteAttack) {
+					var cPiece = GetPieceAtPosition(pos);
+					if (cPiece.PieceType == ChessPieceType.Knight || cPiece.PieceType == ChessPieceType.Bishop && cPiece.Player == 1)
+					{
+						whiteThreaten += 1;
+					}
+					else if (cPiece.PieceType == ChessPieceType.Rook && cPiece.Player == 1)
+					{
+						whiteThreaten += 2;
+					}
+					else if (cPiece.PieceType == ChessPieceType.Queen && cPiece.Player == 1)
+					{
+						whiteThreaten += 5;
+					}
+					else if (cPiece.PieceType == ChessPieceType.King && cPiece.Player == 1)
+					{
+						whiteThreaten += 4;
+					}
+				}
+
+				foreach (BoardPosition pos in blackAttack) {
+					var cPiece = GetPieceAtPosition(pos);
+					if (cPiece.PieceType == ChessPieceType.Knight || cPiece.PieceType == ChessPieceType.Bishop && cPiece.Player == 2)
+					{
+						blackThreaten += 1;
+					}
+					else if (cPiece.PieceType == ChessPieceType.Rook && cPiece.Player == 2)
+					{
+						blackThreaten += 2;
+					}
+					else if (cPiece.PieceType == ChessPieceType.Queen && cPiece.Player == 2)
+					{
+						blackThreaten += 5;
+					}
+					else if (cPiece.PieceType == ChessPieceType.King && cPiece.Player == 2)
+					{
+						blackThreaten += 4;
+					}
+				}
+
+				return (whiteOwnership + whitePawnMove + whiteProtect + whiteThreaten) - (blackOwnership + blackPawnMove + blackProtect + blackThreaten);
+			}
+		}
 		private List<ChessPiece> CapturedPieces { get; set; }
 		private ISet<BoardPosition> tempList { get; set; }
 		private int NumMovesNoPawnOrCapture { get; set; }
@@ -68,7 +139,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 		// the access level (public, private).
 
 
-		public bool IsFinished { get { return GetPossibleMoves().Any() || IsDraw; } }
+		public bool IsFinished { get { return !GetPossibleMoves().Any() || IsDraw; } }
 
 		public int CurrentPlayer { get { return mCurrentPlayer == 1 ? 1 : 2; } }
 
