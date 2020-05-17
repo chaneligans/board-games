@@ -142,7 +142,7 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 		/// <summary>
 		/// Applies a move for the current player at the given position.
 		/// </summary>
-		public void ApplyMove(BoardPosition startPosition, BoardPosition endPosition, ChessPieceType type) {
+		public async Task ApplyMove(BoardPosition startPosition, BoardPosition endPosition, ChessPieceType type) {
 			var possMoves = mBoard.GetPossibleMoves() as IEnumerable<ChessMove>;
 			ChessMove promoMove;
 			// Validate the move as possible.
@@ -162,7 +162,7 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 
 			if (Players == NumberOfPlayers.One && !mBoard.IsFinished)
 			{
-				var bestMove = mGameAi.FindBestMove(mBoard);
+				var bestMove = await Task.Run( ()=>mGameAi.FindBestMove(mBoard) );
 				if (bestMove != null)
 				{
 					mBoard.ApplyMove(bestMove as ChessMove);

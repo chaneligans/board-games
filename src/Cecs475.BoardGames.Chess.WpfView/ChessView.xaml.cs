@@ -29,6 +29,11 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 		}
 
 		private void Border_MouseEnter(object sender, MouseEventArgs e) {
+			if (!IsEnabled)
+			{
+				return;
+			}
+
 			Border b = sender as Border;
 			var square = b.DataContext as ChessSquare;
 			var vm = FindResource("vm") as ChessViewModel;
@@ -63,7 +68,11 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 			square.IsHighlighted = false;
 		}
 
-		private void Border_MouseUp(object sender, MouseButtonEventArgs e) {
+		private async void Border_MouseUp(object sender, MouseButtonEventArgs e) {
+			if (!IsEnabled)
+			{
+				return;
+			}
 			Border b = sender as Border;
 			var square = b.DataContext as ChessSquare;
 			var vm = FindResource("vm") as ChessViewModel;
@@ -97,12 +106,16 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 						}
 						else
 						{
-							vm.ApplyMove(selectedSquares.FirstOrDefault().Position, square.Position, selectedSquares.FirstOrDefault().Piece.PieceType);
+							IsEnabled = false;
+							await vm.ApplyMove(selectedSquares.FirstOrDefault().Position, square.Position, selectedSquares.FirstOrDefault().Piece.PieceType);
+							IsEnabled = true;
 						}
 					}
 					else
 					{
-						vm.ApplyMove(selectedSquares.FirstOrDefault().Position, square.Position, selectedSquares.FirstOrDefault().Piece.PieceType);
+						IsEnabled = false;
+						await vm.ApplyMove(selectedSquares.FirstOrDefault().Position, square.Position, selectedSquares.FirstOrDefault().Piece.PieceType);
+						IsEnabled = true;
 					}
 					square.IsHighlighted = false;
 					selectedSquares.FirstOrDefault().IsSelected = false;
