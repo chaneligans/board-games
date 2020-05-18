@@ -42,6 +42,7 @@ namespace Cecs475.BoardGames.WpfApp {
 		}
 
 		private void UndoButton_Click(object sender, RoutedEventArgs e) {
+			if (!IsEnabled) { return; }
 			(FindResource("ViewModel") as IGameViewModel).UndoMove();
 		}
 	}
