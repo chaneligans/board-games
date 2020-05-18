@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Newtonsoft.Json;
+using RestSharp;
+
 namespace Cecs475.BoardGames.WpfApp {
   /// <summary>
   /// Interaction logic for LoadingScreen.xaml
@@ -21,9 +24,19 @@ namespace Cecs475.BoardGames.WpfApp {
       InitializeComponent();
     }
 
-    async void OnLoad(object sender, RoutedEventArgs e) {
+    public async void OnLoad(object sender, RoutedEventArgs e) {
+      var client = new RestClient("https://cecs475-boardamges.herokuapp.com/api/games");
+      var request = new RestRequest(Method.GET);
+      var response = await client.ExecuteAsync(request);
 
+      // idk what to do here
+      var deserialized = JsonConvert.DeserializeObject(response.Content);
+      deserialized.ToString();
+      // up to here
 
+      GameChoiceWindow gameChoiceWindow = new GameChoiceWindow();
+      gameChoiceWindow.Show();
+      this.Close();
     }
   }
 }
