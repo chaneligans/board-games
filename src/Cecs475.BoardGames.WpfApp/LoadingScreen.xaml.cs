@@ -34,7 +34,7 @@ namespace Cecs475.BoardGames.WpfApp {
      foreach (Game game in games) {
         WebClient webClient = new WebClient();
         foreach (Info file in game.Files) {
-          await webClient.DownloadFileTaskAsync(file.URL, "..\\Debug\\games\\" + file.Name);
+          await webClient.DownloadFileTaskAsync(file.URL, "..\\Debug\\games\\" + file.FileName);
         }
       }
 
