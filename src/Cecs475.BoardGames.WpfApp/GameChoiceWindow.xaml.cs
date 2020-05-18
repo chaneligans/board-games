@@ -28,7 +28,8 @@ namespace Cecs475.BoardGames.WpfApp {
 			foreach (var file in allfiles) {
 				FileInfo info = new FileInfo(file);
 				if (info.Extension == ".dll") {
-					Assembly.Load(info.Name + ", Version=1.0.0.0, Culture=neutral, PublicKeyToken=68e71c13048d452a");
+					String name = info.Name.Remove(info.Name.Length - 4, 4);
+					Assembly.Load(name + ", Version=1.0.0.0, Culture=neutral, PublicKeyToken=68e71c13048d452a");
 				}
 			}
 
