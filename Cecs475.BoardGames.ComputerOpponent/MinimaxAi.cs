@@ -29,7 +29,7 @@ namespace Cecs475.BoardGames.ComputerOpponent {
 				};
 			}
 
-			long bestWeight = isMaximizing ? beta : alpha;
+			long bestWeight = isMaximizing ? alpha : beta;
 			IGameMove bestMove = null;
 			foreach (IGameMove possibleMove in b.GetPossibleMoves()) {
 				b.ApplyMove(possibleMove);
