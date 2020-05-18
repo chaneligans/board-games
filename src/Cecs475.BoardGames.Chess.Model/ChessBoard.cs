@@ -35,7 +35,6 @@ namespace Cecs475.BoardGames.Chess.Model {
 
 		// Add a means of tracking miscellaneous board state, like captured pieces and the 50-move rule.
 
-		//Need to do protect
 		public long BoardWeight
 		{
 			get
@@ -60,6 +59,31 @@ namespace Cecs475.BoardGames.Chess.Model {
 					}
 					else if (cPiece.PieceType == ChessPieceType.Pawn && cPiece.Player == 2) {
 						blackPawnMove += pos.Row - 1;
+					}
+				}
+
+				foreach (BoardPosition pos in boardPositions)
+				{
+					var cPiece = GetPieceAtPosition(pos);
+					if (cPiece.PieceType == ChessPieceType.Bishop || cPiece.PieceType == ChessPieceType.Knight) {
+						if (cPiece.Player == 1) {
+							foreach (BoardPosition protectPos in whiteAttack)
+							{
+								if (protectPos.Equals(pos))
+								{
+									whiteProtect += 1;
+								}
+							}
+						}
+						else if (cPiece.Player == 2) {
+							foreach (BoardPosition protectPos in blackAttack)
+							{
+								if (protectPos.Equals(pos))
+								{
+									blackProtect += 1;
+								}
+							}
+						}
 					}
 				}
 
