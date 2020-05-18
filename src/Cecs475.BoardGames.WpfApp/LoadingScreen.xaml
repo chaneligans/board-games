@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Cecs475.BoardGames.WpfApp"
         mc:Ignorable="d"
+        Loaded="OnLoad"
         Title="LoadingScreen" Height="450" Width="800">
     <Grid>
-    <Label>"Loading games, please wait... "</Label>
+      <Label>"Loading games, please wait... "</Label>
     </Grid>
 </Window>

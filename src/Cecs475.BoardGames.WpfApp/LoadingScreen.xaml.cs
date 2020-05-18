@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,11 +29,14 @@ namespace Cecs475.BoardGames.WpfApp {
       var client = new RestClient("https://cecs475-boardamges.herokuapp.com/api/games");
       var request = new RestRequest(Method.GET);
       var response = await client.ExecuteAsync(request);
-
-      // idk what to do here
-      var deserialized = JsonConvert.DeserializeObject(response.Content);
-      deserialized.ToString();
-      // up to here
+      var games = JsonConvert.DeserializeObject<List<Game>>(response.Content);
+      
+     foreach (Game game in games) {
+        WebClient webClient = new WebClient();
+        foreach (Info file in game.Files) {
+          await webClient.DownloadFileTaskAsync(file.URL, "..\\Debug\\games\\" + file.Name);
+        }
+      }
 
       GameChoiceWindow gameChoiceWindow = new GameChoiceWindow();
       gameChoiceWindow.Show();
