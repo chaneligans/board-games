@@ -139,7 +139,7 @@ namespace Cecs475.BoardGames.Chess.Model {
 		// the access level (public, private).
 
 
-		public bool IsFinished { get { return !GetPossibleMoves().Any() || IsDraw; } }
+		public bool IsFinished { get { return IsCheckmate || IsStalemate || IsDraw; } }
 
 		public int CurrentPlayer { get { return mCurrentPlayer == 1 ? 1 : 2; } }
 

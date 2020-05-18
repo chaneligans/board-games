@@ -116,6 +116,14 @@ namespace Cecs475.BoardGames.Chess.WpfView {
 		public ChessViewModel() {
 			mBoard = new ChessBoard();
 
+			if (Players == NumberOfPlayers.One && !mBoard.IsFinished) {
+				var bestMove = mGameAi.FindBestMove(mBoard);
+				if (bestMove != null) {
+					mBoard.ApplyMove(bestMove as ChessMove);
+				}
+			}
+
+
 			// Initialize the squares objects based on the board's initial state.
 			mSquares = new ObservableCollection<ChessSquare>(
 				BoardPosition.GetRectangularPositions(8, 8)
