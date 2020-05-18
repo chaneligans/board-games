@@ -20,5 +20,10 @@ namespace Cecs475.BoardGames.WpfApp {
     public LoadingScreen() {
       InitializeComponent();
     }
+
+    async void OnLoad(object sender, RoutedEventArgs e) {
+
+
+    }
   }
 }
