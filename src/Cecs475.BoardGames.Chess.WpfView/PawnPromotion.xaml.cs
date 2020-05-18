@@ -102,32 +102,32 @@ namespace Cecs475.BoardGames.Chess.WpfView
 			}
 		}
 
-		private void Promo_MouseUp(object sender, MouseEventArgs e)
+		private async void Promo_MouseUp(object sender, MouseEventArgs e)
 		{
 			Border b = sender as Border;
 			Image i = sender as Image;
 
 			if (b == border_knight || i == black_knight || i == white_knight)
 			{
-				vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Knight);
+				await vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Knight);
 				this.Hide();
 			}
 
 			if (b == border_bishop || i == black_bishop || i == white_bishop)
 			{
-				vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Bishop);
+				await vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Bishop);
 				this.Hide();
 			}
 
 			if (b == border_rook || i == black_rook || i == white_rook)
 			{
-				vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Rook);
+				await vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Rook);
 				this.Hide();
 			}
 
 			if (b == border_queen || i == black_queen || i == white_queen)
 			{
-				vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Queen);
+				await vm.ApplyMove(StartPosition, EndPosition, ChessPieceType.Queen);
 				this.Hide();
 			}
 
