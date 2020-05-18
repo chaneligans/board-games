@@ -37,11 +37,13 @@ namespace Cecs475.BoardGames.ComputerOpponent {
 				b.UndoLastMove();
 
 				if (isMaximizing && w > alpha) {
-					alpha = w;
+					alpha = Math.Max(alpha, w);
+					bestWeight = w;
 					bestMove = possibleMove;
 				}
 				else if (!isMaximizing && w < beta) {
-					beta = w;
+					beta = Math.Min(beta, w);
+					bestWeight = w;
 					bestMove = possibleMove;
 				}
 
